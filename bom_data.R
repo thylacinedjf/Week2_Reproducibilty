@@ -4,8 +4,8 @@ library(tidyverse)
 
 # read data
 
-bom_data <- read.csv('data/BOM_data.csv')
-bom_stations <- read.csv('data/BOM_stations.csv')
+bom_data <- read_csv('data/BOM_data.csv')
+bom_stations <- read_csv('data/BOM_stations.csv')
 
 # Question 1 - For each station, how many days have a minimum temperature,
 # a maximum temperature and a rainfall measurement recorded?
@@ -28,13 +28,14 @@ arrange(temp_mean)
 
 bom_station_data <- bom_stations %>% 
   gather(Station_ID, Misc, -info) %>% 
-  spread(info, Misc) %>%
-  mutate(Station_ID = as.integer(gsub("\\X","",bom_station_data$Station_ID)))
+  spread(info, Misc)
+  
 
 # STEP2 convert temp min and max from chr to numbers
 
 temp_min_max_sep <- mutate(temp_min_max_sep, temp_min = as.numeric(temp_min))
 temp_min_max_sep <- mutate(temp_min_max_sep, temp_max = as.numeric(temp_max))
+bom_station_data <- mutate(bom_station_data, Station_number = as.numeric(Station_number))
 
 # STEP3 join the two data sets
 
@@ -46,6 +47,7 @@ combined_bom_data <- full_join(temp_min_max_sep, bom_station_data, 'Station_numb
 lowest_average_temp <- group_by(combined_bom_data, state) %>%
   summarise(lowest_average_temp = mean(temp_min, na.rm = TRUE)) %>%
   arrange(lowest_average_temp)
+
 View(lowest_average_temp)
   
 # Question 4 Does the westmost (lowest longitude) or eastmost (highest longitude)
@@ -58,4 +60,5 @@ View(lowest_average_temp)
 solar_exp <- group_by(combined_bom_data, Station_number, lon) %>%
   summarise(solar_exp = mean(as.numeric(as.character(Solar_exposure)), na.rm = TRUE)) %>%
   arrange(lon)
+
 View(solar_exp)
