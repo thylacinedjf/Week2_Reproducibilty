@@ -11,4 +11,5 @@ bom_stations <- read.csv('data/BOM_stations.csv')
 # a maximum temperature and a rainfall measurement recorded?
 
 temp_min_max_sep <- separate(bom_data, Temp_min_max, into = c('temp_min', 'temp_max'),sep= '/') %>% 
-filter(temp_min != '-', temp_max != '-', Rainfall != '-') 
+filter(temp_min != '-', temp_max != '-', Rainfall != '-') -> stations_max_min_rain
+
