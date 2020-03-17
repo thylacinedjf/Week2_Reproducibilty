@@ -25,4 +25,15 @@ arrange(temp_mean)
 # Question 3 Does the westmost (lowest longitude) or eastmost (highest longitude)
 # weather station in our dataset have a higher average solar exposure?
 
+bom_station_data <- bom_stations %>% 
+  gather(Station_ID, Misc, -info) %>% 
+  spread(info, Misc) %>% 
+  mutate(as.numeric(Station_ID))
 
+bom_station_rename <- rename(bom_station_data, Station_number = as.numeric(Station_number))
+
+bom_station_data <- mutate(bom_station_data, station_number = as.character(Station_ID))
+
+ 
+  
+full_join(bom_station_rename, bom_station_data)
