@@ -13,3 +13,7 @@ bom_stations <- read.csv('data/BOM_stations.csv')
 temp_min_max_sep <- separate(bom_data, Temp_min_max, into = c('temp_min', 'temp_max'),sep= '/') %>% 
 filter(temp_min != '-', temp_max != '-', Rainfall != '-') -> stations_max_min_rain
 
+view(stations_max_min_rain)
+
+# Question 2 - Which month saw the lowest average daily temperature difference?
+
