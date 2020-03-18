@@ -52,21 +52,25 @@ View(lowest_average_temp)
 # Question 4 Does the westmost (lowest longitude) or eastmost (highest longitude)
 # weather station in our dataset have a higher average solar exposure?
 
-# STEP WHATEVER! group by station number and longitude.
+# STEP WHATEVER! group by station number and longitude and state.
 # get the mean of Solar_exposure
 # arrange by longitude. Save. Commit. Push. Have a stiff drink and go to bed!
-
-# solar_exp <- group_by(combined_bom_data, Station_number, lon) %>% 
-#  summarise(solar_exp = mean(as.numeric(Solar_exposure)), na.rm = 'TRUE') %>% 
-#  arrange(desc(lon))
+# Next morning - ARRRRGH! redo!
 
 bom_solar_exp <- combined_bom_data
 group_by(bom_solar_exp, lon, state, Station_number)
+
+# get mean of solar exposure.
+
 summarise(bom_solar_exp, Solar_exposure = mean(as.numeric(Solar_exposure)), na.rm = TRUE)
 bom_solar_exp <- filter(bom_solar_exp, Solar_exposure != '-')
 
-arrange(bom_solar_exp, lon)
-# ungroup(bom_solar_exp)
-# filter(lon == max(lon) |lon == min(lon))
+# arrange by lon.
 
-View(bom_solar_exp)
+ungroup(bom_solar_exp)
+arrange(bom_solar_exp, desc(lon))
+
+# return first and last rows.
+
+Question4_answer <- slice(bom_solar_exp, 1,(n()-1))
+view(Question4_answer)
