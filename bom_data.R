@@ -58,7 +58,7 @@ View(lowest_average_temp)
 # arrange by longitude. Save. Commit. Push. Have a stiff drink and go to bed!
 
 solar_exp <- group_by(combined_bom_data, Station_number, lon) %>%
-  summarise(solar_exp = mean(as.numeric(as.character(Solar_exposure)), na.rm = TRUE)) %>%
+  summarise(solar_exp = mean(as.numeric(Solar_exposure)), na.rm = TRUE) %>%
   arrange(lon)
 
 View(solar_exp)
