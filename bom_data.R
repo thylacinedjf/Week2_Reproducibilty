@@ -35,11 +35,10 @@ bom_station_data <- bom_stations %>%
 
 temp_min_max_sep <- mutate(temp_min_max_sep, temp_min = as.numeric(temp_min))
 temp_min_max_sep <- mutate(temp_min_max_sep, temp_max = as.numeric(temp_max))
-bom_station_data <- mutate(bom_station_data, Station_number = as.numeric(Station_number))
+bom_station_data <- mutate(bom_station_data, Station_number = as.numeric(Station_ID))
 
 # STEP3 join the two data sets
 
-names(bom_station_data)[names(bom_station_data) == "Station_ID"] <- "Station_number"
 combined_bom_data <- full_join(temp_min_max_sep, bom_station_data, 'Station_number')
 
 # STEP4 sort by state and arrange
@@ -57,8 +56,17 @@ View(lowest_average_temp)
 # get the mean of Solar_exposure
 # arrange by longitude. Save. Commit. Push. Have a stiff drink and go to bed!
 
-solar_exp <- group_by(combined_bom_data, Station_number, lon) %>%
-  summarise(solar_exp = mean(as.numeric(Solar_exposure)), na.rm = TRUE) %>%
-  arrange(lon)
+# solar_exp <- group_by(combined_bom_data, Station_number, lon) %>% 
+#  summarise(solar_exp = mean(as.numeric(Solar_exposure)), na.rm = 'TRUE') %>% 
+#  arrange(desc(lon))
 
-View(solar_exp)
+bom_solar_exp <- combined_bom_data
+group_by(bom_solar_exp, lon, state, Station_number)
+summarise(bom_solar_exp, Solar_exposure = mean(as.numeric(Solar_exposure)), na.rm = TRUE)
+bom_solar_exp <- filter(bom_solar_exp, Solar_exposure != '-')
+
+arrange(bom_solar_exp, lon)
+# ungroup(bom_solar_exp)
+# filter(lon == max(lon) |lon == min(lon))
+
+View(bom_solar_exp)
